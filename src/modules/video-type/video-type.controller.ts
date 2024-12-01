@@ -13,7 +13,11 @@ import { access } from 'fs';
 import { Request } from 'express';
 import { TVideoType } from 'src/common/@type/video-type';
 
+import { CreateVideoTypeDto } from './dto/create-videotype.dto';
+import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 @Controller('video')
+@ApiTags('Video Type NÈ')
 export class VideoTypeController {
   constructor(private readonly videoTypeService: VideoTypeService) {}
 
@@ -28,6 +32,10 @@ export class VideoTypeController {
     return await this.videoTypeService.getVideoType(page, pageSize);
   }
 
+  @ApiConsumes('Video Demo')
+  @ApiOperation({
+    summary: 'Đây là enpoint để lấy list VideoType',
+  })
   @Get('video-type/:id')
   async getVideoTypeById(@Param('id') id: string) {
     // console.log(id);
@@ -36,7 +44,7 @@ export class VideoTypeController {
 
   //create-video-type
   @Post('video-type')
-  async createVideoType(@Body() body: TVideoType) {
+  async createVideoType(@Body() body: CreateVideoTypeDto) {
     return await this.videoTypeService.createVideoType(body);
   }
 }
