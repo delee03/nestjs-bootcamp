@@ -19,9 +19,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(loginDto: LoginDto) {
+  async login(body: LoginDto) {
     //b1: nhận dữ liệu từ FE (body gửi lên);
-    let { email, pass_word } = loginDto;
+    let { email, pass_word } = body;
     console.log(email, pass_word);
 
     // b2: kiểm tra email có trong hệ thống hay không? 2 TH
