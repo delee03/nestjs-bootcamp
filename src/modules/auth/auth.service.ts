@@ -11,12 +11,14 @@ import {
 } from 'src/common/constant/config.constant';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async login(body: LoginDto) {
@@ -57,19 +59,21 @@ export class AuthService {
         user_id: user.user_id,
       },
       {
-        secret: ACCESS_TOKEN_SECRET,
-        expiresIn: ACCESS_TOKEN_EXPIRE,
+        secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
+        expiresIn: this.configService.get<string>('ACCESS_TOKEN_EXPIRE'),
       },
     ); // => nhiệm vụ : prove user đã logged in
-
+    console.log({
+      accessToken: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
+    });
     //refresh => thời hạn lâu hơn tk accessToken ,
     const refreshToken = this.jwtService.sign(
       {
         user_id: user.user_id,
       },
       {
-        secret: REFRESH_TOKEN_SECRET,
-        expiresIn: REFRESH_TOKEN_EXPIRE,
+        secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
+        expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRE'),
       },
     ); // => nhiệm vụ : prove user đã logged inn
     return {
